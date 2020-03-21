@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">mad_project_home_post</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_announcement">Your Announcement</string>
+    <string name="menu_slideshow">Election Result</string>
+    <string name="menu_tools">Candidate For Election</string>
+    <string name="menu_share">Faculty Access</string>
+    <string name="menu_send">Send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

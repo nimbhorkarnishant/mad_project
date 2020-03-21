@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E91E63">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#E91E63">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:elevation="8dp"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/optiona_menu"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_person_black_24dp" />
+
+            <TextView
+                android:id="@+id/candi_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nishant Nimbhorkar"
+                android:textSize="20sp"
+                android:layout_marginLeft="20mm"
+                android:layout_marginTop="12dp"
+                />
+
+
+
+
+        </RelativeLayout>
+    </LinearLayout>>
+
+</LinearLayout>

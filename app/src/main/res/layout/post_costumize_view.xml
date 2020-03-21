@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E91E63">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#E91E63">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:elevation="8dp"
+                android:padding="10dp">
+
+
+                <TextView
+                    android:id="@+id/post_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Announcement For CR Election"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:id="@+id/post_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/post_title"
+                    android:layout_marginTop="10dp"
+                    android:text="17 March,2020"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/post_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/post_date"
+                    android:text="30 min ago"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/optiona_menu"-->
+<!--                    android:layout_width="10dp"-->
+<!--                    android:layout_height="10dp"-->
+<!--                    android:layout_marginLeft="57mm"-->
+<!--                    android:src="@drawable/ic_menu_black_24dp"-->
+<!--                    android:onClick="show_popup"/>-->
+
+                <TextView
+                    android:id="@+id/post_Content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/post_time"
+                    android:layout_marginTop="10dp"
+                    android:text="Announcement For CR Election There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form..."
+                    android:textSize="14dp" />
+                <Button
+                    android:id="@+id/register_button"
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/post_Content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="#E91E63"
+                    android:text="Register"
+                    android:textColor="#FFF"
+                    />
+                <TextView
+                    android:id="@+id/register_button_text_bool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/post_Content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="13dp"
+                    android:text="Register Button : Yes" />
+
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="43mm"
+                    android:layout_below="@+id/post_Content"
+                    android:layout_marginTop="10dp"
+                    android:text="Rahul Jain" />
+
+                <TextView
+                    android:id="@+id/user_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="43mm"
+                    android:layout_below="@+id/user_name"
+                    android:text="HOD OF SCET" />
+
+
+            </RelativeLayout>
+        </LinearLayout>>
+
+</LinearLayout>
