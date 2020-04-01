@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="424dp"
+        android:layout_height="264dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8DE5FA"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/make_anounce_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Register Candidate Details"
+                android:textAlignment="center"
+                android:textColor="#FFF"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+
+            <ImageView
+                android:id="@+id/candi_img"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/ic_person_black_24dp" />
+
+            <TextView
+                android:id="@+id/candi_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Cnadidate Name: Nishant Nimbhorkar"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/candi_prn_no_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Cnadidate PRN NO: 0120170224"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/tv_candi_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Cnadidate Email Id: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/candi_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30mm"
+            android:layout_marginTop="10dp"
+            android:text="nbnimbhorkar@mitaoe.ac.in "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:id="@+id/tv_candi_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate DOB: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/candi_email"/>
+        <TextView
+            android:id="@+id/candi_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="25/12/1998 "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/candi_email"/>
+        <TextView
+            android:id="@+id/tv_candi_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate Year: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_dob"/>
+        <TextView
+            android:id="@+id/candi_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="TY"
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/tv_candi_dob"/>
+        <TextView
+            android:id="@+id/tv_candi_dept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate Department:"
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_year"/>
+        <TextView
+            android:id="@+id/candi_dept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="SCET "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/tv_candi_year"/>
+        <TextView
+            android:id="@+id/tv_candi_Block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate Block: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_dept"/>
+        <TextView
+            android:id="@+id/candi_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="C"
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/tv_candi_dept"/>
+        <TextView
+            android:id="@+id/tv_candi_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate Apply Position: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_Block"/>
+        <TextView
+            android:id="@+id/candi_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="CR"
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/tv_candi_Block"/>
+        <TextView
+            android:id="@+id/tv_candi_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate ID: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_pos"/>
+        <TextView
+            android:id="@+id/candi_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36mm"
+            android:layout_marginTop="5dp"
+            android:text="Candidate_1"
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/tv_candi_pos"/>
+        <TextView
+            android:id="@+id/tv_candi_Resume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Cnadidate Resume: "
+            android:textSize="15dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/tv_candi_id"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/button_update_candi"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/drop_down_position"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="15dp"
+        android:background="#E91E63"
+        android:text="Update Candidate"
+        android:textColor="#FFF" />
+
+
+</LinearLayout>

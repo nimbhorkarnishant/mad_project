@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.add_post">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/make_anounce_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Candidate By Email"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="20dp"/>
+
+
+    <TextView
+        android:id="@+id/email_sub_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/make_anounce_text"
+        android:layout_marginTop="25dp"
+        android:text="Subject Of Email:"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:id="@+id/email_subject"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/email_sub_tv"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border"
+        android:hint="Enter Subject Of Email"
+        android:textColor="#E91E63"
+        />
+
+
+    <TextView
+        android:id="@+id/email_desc_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_subject"
+        android:layout_marginTop="25dp"
+        android:text="Describe Messege:"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:id="@+id/email_Content"
+        android:layout_width="match_parent"
+        android:layout_height="40mm"
+        android:layout_below="@+id/email_desc_tv"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/border"
+        android:gravity="top"
+        android:hint="Describe your Messege"
+        android:textColor="#E91E63" />
+
+    <Button
+        android:id="@+id/button_email"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_Content"
+        android:layout_marginTop="26dp"
+        android:background="#E91E63"
+        android:text="Send Email"
+        android:textColor="#FFF"
+        android:gravity="center"
+        android:layout_marginLeft="15mm"/>
+
+
+</RelativeLayout>

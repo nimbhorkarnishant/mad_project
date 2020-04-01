@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_home"
+    >
 
     <fragment
         android:id="@+id/nav_home"
@@ -20,8 +21,30 @@
     <fragment
         android:id="@+id/nav_faculty_acces"
         android:name="com.example.mad_project.ui.faculty_access.register_candi_faculty_access"
-        android:label="@string/menu_announcement"
+        android:label="Register Candidate"
         tools:layout="@layout/fragment_register_candi_faculty_access" />
 
+    <fragment
+        android:id="@+id/nav_election_candidate"
+        android:name="com.example.mad_project.ui.live_voting.election_candidate"
+        android:label="Candidate For Election"
+        tools:layout="@layout/fragment_election_candidate" />
+
+    <fragment
+        android:id="@+id/nav_faculty_acces_register_candi"
+        android:name="com.example.mad_project.ui.faculty_access.candi_detail_faculty_acc"
+        android:label="Candidate Details"
+        tools:layout="@layout/fragment_candi_detail_faculty_acc" >
+        <action
+            android:id="@+id/action_nav_faculty_acces_register_candi_to_nav_faculty_acces"
+            app:destination="@id/nav_faculty_acces"
+            app:popUpTo="@id/nav_faculty_acces_register_candi"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_send_email"
+        android:name="com.example.mad_project.ui.faculty_access.update_candi_via_email"
+        android:label="Send Email"
+        tools:layout="@layout/fragment_update_candi_via_email" />
 
 </navigation>

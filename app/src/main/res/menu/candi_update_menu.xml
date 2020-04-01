@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/accept_candi"
+        android:title="Accept As candidate" />
+
+    <item
+        android:id="@+id/reject_candi"
+        android:title="Reject As a Candidate" />
+    <item
+        android:id="@+id/give_update_candi"
+        android:title="Send update Via email" />
+    <item
+        android:id="@+id/sent_email"
+        android:title="Sent Email" />
+
+</menu>

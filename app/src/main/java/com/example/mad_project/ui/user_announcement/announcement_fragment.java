@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -173,9 +174,11 @@ public class announcement_fragment extends Fragment {
 
                 final Fragment frag=new update_post();
                 frag.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, frag);
-                transaction.addToBackStack(null);
+                Fragment f1=getParentFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.add(R.id.nav_host_fragment, frag);
+                transaction.addToBackStack("Frag1");
+                transaction.remove(f1);
                 transaction.commit();
                 return true;
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.add_post">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/make_anounce_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Candidate For Election"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="10dp"/>
+
+
+    <TextView
+        android:id="@+id/election_status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/make_anounce_text"
+        android:layout_marginTop="35dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:textColor="#E42515"/>
+
+    <Button
+        android:id="@+id/button_show_candi"
+        android:layout_width="206dp"
+        android:layout_height="31dp"
+        android:layout_below="@+id/election_status_text"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="14dp"
+        android:background="#E91E63"
+        android:text=""
+        android:textColor="#FFF" />
+
+    <ListView
+        android:id="@+id/list_of_candi"
+        android:layout_width="match_parent"
+        android:layout_height="412dp"
+        android:layout_below="@+id/button_show_candi"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="-4dp"
+        android:layout_marginBottom="90dp">
+
+    </ListView>
+
+
+</RelativeLayout>

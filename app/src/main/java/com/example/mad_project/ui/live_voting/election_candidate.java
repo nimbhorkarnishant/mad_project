@@ -1,69 +1,51 @@
-package com.example.mad_project.ui.faculty_access;
+package com.example.mad_project.ui.live_voting;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mad_project.R;
-import com.example.mad_project.ui.home.post_adapter;
-import com.example.mad_project.ui.home.post_obj;
-import com.example.mad_project.ui.user_announcement.update_post;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.mad_project.ui.faculty_access.candi_detail_faculty_acc;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link register_candi_faculty_access.OnFragmentInteractionListener} interface
+ * {@link election_candidate.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link register_candi_faculty_access#newInstance} factory method to
+ * Use the {@link election_candidate#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class register_candi_faculty_access extends Fragment {
+public class election_candidate extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ArrayList<register_candi_obj> register_candi_list;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private  final String[] year = {"Select Year","FE", "SY", "TY","Btech"};
     private  final String[] department = {"Select Department","FE","SCET", "SMEC", "CHEMICAL","ETC"};
     private  final String[] block = {"Select Block","A", "B", "C","D","E","F","G","H"};
     private  final String[] position = {"Select Position","CR", "President", "WIse President"};
-    private register_candidate_adpter adpater;
     Spinner spinner_year,spinner_dept,spinner_block,spinner_pos;
     Button button_show_candi;
 
 
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public register_candi_faculty_access() {
+    public election_candidate() {
         // Required empty public constructor
     }
 
@@ -73,11 +55,11 @@ public class register_candi_faculty_access extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment register_candi_faculty_access.
+     * @return A new instance of fragment election_candidate.
      */
     // TODO: Rename and change types and number of parameters
-    public static register_candi_faculty_access newInstance(String param1, String param2) {
-        register_candi_faculty_access fragment = new register_candi_faculty_access();
+    public static election_candidate newInstance(String param1, String param2) {
+        election_candidate fragment = new election_candidate();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -97,9 +79,8 @@ public class register_candi_faculty_access extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_register_candi_faculty_access, container, false);
-        register_candi_list=new ArrayList<>();
-
+        // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.fragment_election_candidate, container, false);
         spinner_year = (Spinner)view.findViewById(R.id.drop_down_year);
         spinner_dept = (Spinner)view.findViewById(R.id.drop_down_dept);
         spinner_block = (Spinner)view.findViewById(R.id.drop_down_block);
@@ -121,87 +102,32 @@ public class register_candi_faculty_access extends Fragment {
 
         adapter_post.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_pos.setAdapter(adapter_post);
-        // Inflate the layout for this fragment
-        ListView listView=view.findViewById(R.id.list_of_candi);
-        adpater=new register_candidate_adpter(getContext(),register_candi_list);
-        listView.setAdapter(adpater);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selected = ((TextView) view.findViewById(R.id.candi_name)).getText().toString();
-
-
-
-                Bundle bundle=new Bundle();
-                bundle.putString("candidate_id_det",selected );
-                final Fragment frag=new candi_detail_faculty_acc();
-                frag.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, frag);
-                transaction.addToBackStack("frag_facu_acc");
-                transaction.commit();
-                //Toast.makeText(getContext(), "Show detail!", Toast.LENGTH_LONG).show();
-            }
-        });
-
 
         button_show_candi=view.findViewById(R.id.button_show_candi);
         button_show_candi.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                show_candidate();
+            public void onClick(View view) {
+                final String  year_candi = spinner_year.getSelectedItem().toString();
+                final String dept_candi = spinner_dept.getSelectedItem().toString();
+                final String block_candi = spinner_block.getSelectedItem().toString();
+                final String pos_candi = spinner_pos.getSelectedItem().toString();
+                Bundle bundle=new Bundle();
+                final Fragment frag=new list_candi_for_election();
+                bundle.putString("year", year_candi);
+                bundle.putString("dept", dept_candi);
+                bundle.putString("block", block_candi);
+                bundle.putString("post", pos_candi);
+                frag.setArguments(bundle);
+                Fragment f1=getParentFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.add(R.id.nav_host_fragment, frag);
+                transaction.addToBackStack(null);
+                transaction.remove(f1);
+                transaction.commit();
             }
         });
         return view;
     }
-
-    public void show_candidate(){
-        final String  year_candi = spinner_year.getSelectedItem().toString();
-        final String dept_candi = spinner_dept.getSelectedItem().toString();
-        final String block_candi = spinner_block.getSelectedItem().toString();
-        final String pos_candi = spinner_pos.getSelectedItem().toString();
-
-        DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election");
-        reff.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int count = (int) dataSnapshot.getChildrenCount();
-                System.out.println(count);
-                System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
-                for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                    String year_candi_test=ds1.child("candi_year").getValue().toString();
-                    String dept_candi_test=ds1.child("candi_dept").getValue().toString();
-                    String block_candi_test=ds1.child("candi_block").getValue().toString();
-                    String pos_candi_test=ds1.child("candi_pos").getValue().toString();
-                    if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) && block_candi_test.equals(block_candi) &&
-                            pos_candi_test.equals(pos_candi))
-                    {
-                        register_candi_list.add(new register_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
-                                ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
-                    }
-                    else {
-                        register_candi_list.clear();
-                        Toast.makeText(getContext(), "No one is register yet in this section!", Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-                adpater.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-
-
-    }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,10 +95,12 @@ public class update_post extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_update_post, container, false);
+        System.out.println("count--------->"+getParentFragmentManager().getBackStackEntryCount());
         spinner = (Spinner)v.findViewById(R.id.spinner_drop_down);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
         //spinner.setOnItemSelectedListener(this);
         title=v.findViewById(R.id.post_title);
         content=v.findViewById(R.id.post_Content);
@@ -130,6 +133,7 @@ public class update_post extends Fragment {
         });
         return v;
     }
+
     public void update_post_data(){
         String date1;
         String time;

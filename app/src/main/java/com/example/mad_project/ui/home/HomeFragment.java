@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment {
         textView.setText("Announcements");
         post_data=new ArrayList<>();
 
-
         ListView listView=root.findViewById(R.id.list_of_post);
         adapter=new post_adapter(getContext(),post_data);
         listView.setAdapter(adapter);
@@ -73,19 +72,22 @@ public class HomeFragment extends Fragment {
 
         });
 
-            final Fragment frag=new add_post();
+           final Fragment frag=new add_post();
             FloatingActionButton add_post_buuton=root.findViewById(R.id.add_post);
             add_post_buuton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, frag);
+                transaction.addToBackStack("frag_add_post");
                 transaction.commit();
 
             }
         });
+
         return root;
 
     }
+
 
 }
