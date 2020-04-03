@@ -1,6 +1,8 @@
 package com.example.mad_project.ui.live_voting;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,9 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mad_project.R;
-import com.example.mad_project.ui.faculty_access.candi_detail_faculty_acc;
 import com.example.mad_project.ui.faculty_access.register_candi_faculty_access;
-import com.example.mad_project.ui.faculty_access.register_candi_obj;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +55,7 @@ public class list_candi_for_election extends Fragment {
     String year_candi,block_candi,dept_candi,pos_candi;
     DatabaseReference reff;
     boolean flag;
+    boolean st=false;
     String parent,vote_status;
 
     private OnFragmentInteractionListener mListener;
@@ -95,6 +96,7 @@ public class list_candi_for_election extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_list_candi_for_election, container, false);
+        start_election();
         register_candi_list_selected=new ArrayList<>();
 
          year_candi = getArguments().getString("year");
@@ -139,13 +141,77 @@ public class list_candi_for_election extends Fragment {
         button_show_candi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start_election();
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                toggle_button();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //Do your No progress
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
+                ab.setMessage("Are you sure to Change voting Status?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
             }
         });
         return view;
     }
 
     public void start_election(){
+        System.out.println("------------------- cooming to start election ---------------- ");
+        reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting");
+        reff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = (int) dataSnapshot.getChildrenCount();
+                System.out.println("------------------------------- database -----------------------------");
+                System.out.println(count);
+                for (DataSnapshot ds1:dataSnapshot.getChildren()){
+                    String year_candi_test=ds1.child("year").getValue().toString();
+                    String dept_candi_test=ds1.child("dept").getValue().toString();
+                    String block_candi_test=ds1.child("block").getValue().toString();
+                    String pos_candi_test=ds1.child("position").getValue().toString();
+                    if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi)
+                            && block_candi_test.equals(block_candi) && pos_candi_test.equals(pos_candi)){
+                        flag=true;
+                        vote_status=ds1.child("voting_status").getValue().toString();
+                        parent=ds1.getKey();
+                        if (vote_status.equals("on")){
+                            button_show_candi.setText("Stop Live Voting");
+                            tv_mesg.setText("Live Voting has been Started for This Class Go and Vote For Your Candidate");
+                            tv_mesg.setTextColor(Color.GREEN);
+                        }
+                        else{
+                            button_show_candi.setText("Start Live Voting");
+                            tv_mesg.setText("Live Voting is OFF FOR This Class");
+                            tv_mesg.setTextColor(Color.RED);
+
+                        }
+                        break;
+                    }
+                    else {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+    }
+    public void toggle_button(){
+        System.out.println("------------------- cooming to start election ---------------- ");
         reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting");
         reff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,7 +235,6 @@ public class list_candi_for_election extends Fragment {
 
                     }
                 }
-
             }
 
             @Override
@@ -178,6 +243,7 @@ public class list_candi_for_election extends Fragment {
             }
 
         });
+
         if (flag){
             if (vote_status.equals("off")){
                 reff.child(parent).child("voting_status").setValue("on");
@@ -194,8 +260,10 @@ public class list_candi_for_election extends Fragment {
             }
         }
         else {}
+
     }
     public void show_candidate(){
+        System.out.println("----------------- this is show candid ------------------------------");
 
         DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election");
         reff.addValueEventListener(new ValueEventListener() {

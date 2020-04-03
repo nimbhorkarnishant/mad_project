@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,6 +17,11 @@ import android.widget.Spinner;
 
 import com.example.mad_project.R;
 import com.example.mad_project.ui.faculty_access.candi_detail_faculty_acc;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -37,7 +43,7 @@ public class election_candidate extends Fragment {
     private  final String[] position = {"Select Position","CR", "President", "WIse President"};
     Spinner spinner_year,spinner_dept,spinner_block,spinner_pos;
     Button button_show_candi;
-
+    String year_candi,dept_candi, block_candi,pos_candi,vote_status;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -107,10 +113,10 @@ public class election_candidate extends Fragment {
         button_show_candi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String  year_candi = spinner_year.getSelectedItem().toString();
-                final String dept_candi = spinner_dept.getSelectedItem().toString();
-                final String block_candi = spinner_block.getSelectedItem().toString();
-                final String pos_candi = spinner_pos.getSelectedItem().toString();
+                year_candi = spinner_year.getSelectedItem().toString();
+                dept_candi = spinner_dept.getSelectedItem().toString();
+                block_candi = spinner_block.getSelectedItem().toString();
+                pos_candi = spinner_pos.getSelectedItem().toString();
                 Bundle bundle=new Bundle();
                 final Fragment frag=new list_candi_for_election();
                 bundle.putString("year", year_candi);
@@ -128,6 +134,7 @@ public class election_candidate extends Fragment {
         });
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

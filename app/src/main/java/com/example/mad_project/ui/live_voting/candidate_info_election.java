@@ -3,6 +3,7 @@ package com.example.mad_project.ui.live_voting;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -55,6 +56,7 @@ public class candidate_info_election extends Fragment {
     String parent_key;
     int candidate_vote_count;
     boolean flag_ex;
+    TextView text_meaasge_replace_button;
 
 
 
@@ -110,6 +112,7 @@ public class candidate_info_election extends Fragment {
         candi_block=v.findViewById(R.id.candi_block);
         candi_pos=v.findViewById(R.id.candi_pos);
         candi_id_tv=v.findViewById(R.id.candi_id);
+        text_meaasge_replace_button=v.findViewById(R.id.tv_replace_button);
 
         object_candi=(selected_candi_obj)getArguments().getSerializable("candi_obj");
 
@@ -133,16 +136,21 @@ public class candidate_info_election extends Fragment {
                             if (ds1.child("voting_status").getValue().toString().equals("off")){
                                 button_update_candi.setVisibility(View.GONE);
                             }
-                            else{}
+                            else{
+                                check_user_voted();
+                            }
                         }
                         else {}
                     }
                     else {
                         if (year_candi_test.equals(object_candi.candi_year) && dept_candi_test.equals(object_candi.candi_dept)){
+                            parent_key =ds1.getKey();
                             if (ds1.child("voting_status").getValue().toString().equals("off")){
                                 button_update_candi.setVisibility(View.GONE);
                             }
-                            else{}
+                            else{
+                                check_user_voted();
+                            }
                         }
                         else {}
 
@@ -177,12 +185,13 @@ public class candidate_info_election extends Fragment {
                     }
                 };
                 AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
-                ab.setMessage("Are you sure to Vote This Candidate? ").setPositiveButton("Yes", dialogClickListener)
+                ab.setMessage("Are you sure to Vote This Candidate? Please Remember you can vote only once... ").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
         });
         return v;
     }
+
     public void  display_candi_data(){
 
         candi_name_text.setText("Candidate Name: "+object_candi.candi_name);
@@ -198,79 +207,38 @@ public class candidate_info_election extends Fragment {
         candi_pos_email=object_candi.candi_pos;
     }
 
-    public void vote_for_candidate(){
-        String user_block="C";
-        String user_dept="SCET";
-        String user_year="TY";
-        System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
-        System.out.println(parent_key);
+    public void check_user_voted(){
         DatabaseReference vote= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting").child(parent_key).child("users");
+        vote.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = (int) dataSnapshot.getChildrenCount();
+                System.out.println(count);
+                for (DataSnapshot ds1:dataSnapshot.getChildren()){
+                    // System.out.println("------------------------------- database -----------------------------");
+                    System.out.println(ds1.getValue().toString());
+                    if (ds1.getValue().toString().equals("user_5")){
+                        button_update_candi.setVisibility(View.GONE);
+                        text_meaasge_replace_button.setText("You Already Voted So now you cannot vote!!");
+                        text_meaasge_replace_button.setTextColor(Color.RED);
+                        break;
+                    }
+                    else{}
 
-        if (object_candi.candi_pos.equals("CR")){
-            if (object_candi.candi_block.equals(user_block) && object_candi.candi_dept.equals(user_dept) && object_candi.candi_year.equals(user_year)){
-                System.out.println("dksklbklbklnlktbn");
-                vote.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int count = (int) dataSnapshot.getChildrenCount();
-                        System.out.println(count);
-                        for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                           // System.out.println("------------------------------- database -----------------------------");
-                            System.out.println(ds1.getValue().toString());
-                            if (ds1.getValue().toString().equals("user_5")){
-                                flag_ex=true;
-                            }
-                            else {
-                                flag_ex=false;
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                }
             }
-        }
-        else {
-            System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
-            if (object_candi.candi_block.equals(user_block) && object_candi.candi_dept.equals(user_dept) && object_candi.candi_year.equals(user_year)){
-                System.out.println("dksklbklbklnlktbn");
-                vote.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int count = (int) dataSnapshot.getChildrenCount();
-                        System.out.println(count);
-                        for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                            // System.out.println("------------------------------- database -----------------------------");
-                            System.out.println(ds1.getValue().toString());
-                            if (ds1.getValue().toString().equals("user_5")){
-                                flag_ex=true;
-                            }
-                            else {
-                                flag_ex=false;
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
+        });
+    }
 
-        }
-        if (!flag_ex){
-            System.out.println(candidate_vote_count);
-            FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
+    public void vote_for_candidate(){
+        FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
                     .child(parent_key).child(object_candi.candidate_id).setValue(candidate_vote_count+1);
-            FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
+        FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
                     .child(parent_key).child("users").child("user_5").setValue("user_5");
-            Toast.makeText(getContext(), "Your Vote is Consider!", Toast.LENGTH_LONG).show();
-
-
-        }
-        else {
-            Toast.makeText(getContext(),"You Already Voted !!",Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(getContext(), "Your Vote is Consider!", Toast.LENGTH_LONG).show();
 
     }
 

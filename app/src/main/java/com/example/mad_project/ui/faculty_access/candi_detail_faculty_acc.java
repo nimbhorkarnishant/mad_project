@@ -214,8 +214,8 @@ public class candi_detail_faculty_acc extends Fragment {
                                 String text_content="By considering your Profile and your interview,u your Are not Selectd for live voting for" + candi_pos_email+ " Election ";
                                 JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
                                 javaMailAPI.execute();
-//                                FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election").
-//                                        child(candi_id_detail).removeValue();
+                               FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election").
+                                        child(candi_id_detail).removeValue();
                                 Toast.makeText(getContext(), "He is no more Candidate for election!", Toast.LENGTH_LONG).show();
                                 break;
 

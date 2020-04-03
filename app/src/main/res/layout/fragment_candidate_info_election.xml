@@ -238,6 +238,17 @@
         android:background="#E91E63"
         android:text="Vote for Candidate"
         android:textColor="#FFF" />
+    <TextView
+        android:id="@+id/tv_replace_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text=""
+        android:textSize="15dp"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/tv_candi_id"/>
 
 
 </LinearLayout>
