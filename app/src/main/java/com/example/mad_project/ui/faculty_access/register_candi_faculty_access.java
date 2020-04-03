@@ -157,6 +157,7 @@ public class register_candi_faculty_access extends Fragment {
     }
 
     public void show_candidate(){
+        register_candi_list.clear();
         final String  year_candi = spinner_year.getSelectedItem().toString();
         final String dept_candi = spinner_dept.getSelectedItem().toString();
         final String block_candi = spinner_block.getSelectedItem().toString();
@@ -174,21 +175,22 @@ public class register_candi_faculty_access extends Fragment {
                     String dept_candi_test=ds1.child("candi_dept").getValue().toString();
                     String block_candi_test=ds1.child("candi_block").getValue().toString();
                     String pos_candi_test=ds1.child("candi_pos").getValue().toString();
-                    if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) && block_candi_test.equals(block_candi) &&
-                            pos_candi_test.equals(pos_candi))
+                    if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) && block_candi_test.equals(block_candi) && pos_candi_test.equals(pos_candi))
                     {
                         register_candi_list.add(new register_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
                                 ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
                                 ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
                     }
-                    else {
-                        register_candi_list.clear();
-                        Toast.makeText(getContext(), "No one is register yet in this section!", Toast.LENGTH_LONG).show();
-
-                    }
+                    else {}
 
                 }
-                adpater.notifyDataSetChanged();
+                if (register_candi_list.size()==0){
+                    Toast.makeText(getContext(), "No one is register yet in this section!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    adpater.notifyDataSetChanged();
+
+                }
 
             }
 
