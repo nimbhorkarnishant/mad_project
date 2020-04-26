@@ -145,23 +145,31 @@ public class candi_detail_faculty_acc extends Fragment {
         return v;
     }
     public void  display_candi_data(){
+        try {
+            candi_name_text.setText("Candidate Name: "+register_candi_list_new.get(0).candi_name);
+            candi_prn_no_text.setText("Candidate PRN NO:  "+register_candi_list_new.get(0).candi_prn_no);
+            candi_email.setText(register_candi_list_new.get(0).candi_email);
+            candi_dob.setText(register_candi_list_new.get(0).candi_dob);
+            candi_year.setText(register_candi_list_new.get(0).candi_year);
+            candi_dept.setText(register_candi_list_new.get(0).candi_dept);
+            candi_block.setText(register_candi_list_new.get(0).candi_block);
+            candi_pos.setText(register_candi_list_new.get(0).candi_pos);
+            candi_id_tv.setText(register_candi_list_new.get(0).candidate_id);
+            candi_email_id=register_candi_list_new.get(0).candi_email;
+            candi_pos_email=register_candi_list_new.get(0).candi_pos;
 
-        candi_name_text.setText("Candidate Name: "+register_candi_list_new.get(0).candi_name);
-        candi_prn_no_text.setText("Candidate PRN NO:  "+register_candi_list_new.get(0).candi_prn_no);
-        candi_email.setText(register_candi_list_new.get(0).candi_email);
-        candi_dob.setText(register_candi_list_new.get(0).candi_dob);
-        candi_year.setText(register_candi_list_new.get(0).candi_year);
-        candi_dept.setText(register_candi_list_new.get(0).candi_dept);
-        candi_block.setText(register_candi_list_new.get(0).candi_block);
-        candi_pos.setText(register_candi_list_new.get(0).candi_pos);
-        candi_id_tv.setText(register_candi_list_new.get(0).candidate_id);
-        candi_email_id=register_candi_list_new.get(0).candi_email;
-        candi_pos_email=register_candi_list_new.get(0).candi_pos;
+            year_test=register_candi_list_new.get(0).candi_year;
+            block_test=register_candi_list_new.get(0).candi_block;
+            dept_test=register_candi_list_new.get(0).candi_dept;
+            position_test=register_candi_list_new.get(0).candi_pos;
+        }
+        catch (Exception e){
 
-        year_test=register_candi_list_new.get(0).candi_year;
-        block_test=register_candi_list_new.get(0).candi_block;
-        dept_test=register_candi_list_new.get(0).candi_dept;
-        position_test=register_candi_list_new.get(0).candi_pos;
+        }
+        finally {
+
+        }
+
     }
 
 
@@ -182,14 +190,22 @@ public class candi_detail_faculty_acc extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election").
-                                        child(candi_id_detail).child("selected_for_live_vote").setValue("Yes");
-                                String text_subject="Candidate Interview Result";
-                                String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
-                                JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
-                                javaMailAPI.execute();
-                                adding_to_live_voting();
-                                Toast.makeText(getContext(), "Candidate is Eligible For live Vote!", Toast.LENGTH_LONG).show();
+                                try {
+                                    FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election").
+                                            child(candi_id_detail).child("selected_for_live_vote").setValue("Yes");
+                                    String text_subject="Candidate Interview Result";
+                                    String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
+                                    JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
+                                    javaMailAPI.execute();
+                                    adding_to_live_voting();
+                                }
+                                catch (Exception e){
+
+                                }
+                                finally {
+
+                                }
+
                             break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -249,7 +265,9 @@ public class candi_detail_faculty_acc extends Fragment {
 
     public void adding_to_live_voting(){
         final DatabaseReference reff_vote= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting");
-        reff_vote.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference reff_vote_finalize= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting");
+
+        reff_vote.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count_vot_obj = (int) dataSnapshot.getChildrenCount();
@@ -261,17 +279,53 @@ public class candi_detail_faculty_acc extends Fragment {
                         String dept_candi_test=ds1.child("dept").getValue().toString();
                         String block_candi_test=ds1.child("block").getValue().toString();
                         String pos_candi_test=ds1.child("position").getValue().toString();
+                        if (position_test.equals("CR")){
+                            if (year_test.equals(year_candi_test) && dept_test.equals(dept_candi_test) && block_test.equals(block_candi_test)
+                                    && position_test.equals(pos_candi_test))
+                            {      System.out.println("ya i got");
+                                if (ds1.child(candi_id_detail).exists()){
+                                    Toast.makeText(getContext(), "Candidate is Already added For live Vote!", Toast.LENGTH_LONG).show();
+                                    flag=true;
+                                    break;
 
-                        if (year_candi_test.equals(year_test) && dept_candi_test.equals(dept_test) && block_candi_test.equals(block_test)
-                                &&  pos_candi_test.equals(position_test))
-                        {
-                            reff_vote.child(ds1.getKey()).child(candi_id_detail).setValue(0);
-                            flag=true;
+                                }
+                                else {
+                                    reff_vote.child(ds1.getKey()).child(candi_id_detail).setValue(0);
+                                    flag=true;
+                                    Toast.makeText(getContext(), "Candidate is Eligible For live Vote!", Toast.LENGTH_LONG).show();
+                                    break;
+
+                                }
+                            }
+                            else{
+                                System.out.println("its CR");
+                                flag=false;
+
+                            }
                         }
                         else{
-                            flag=false;
+                            if (year_test.equals(year_candi_test) && dept_test.equals(dept_candi_test) && position_test.equals(pos_candi_test))
+                            {      System.out.println("ya i got 2");
+                                if (ds1.child(candi_id_detail).exists()){
+                                    Toast.makeText(getContext(), "Candidate is Already added For live Vote!", Toast.LENGTH_LONG).show();
+                                    flag=true;
+                                    break;
 
+                                }
+                                else {
+                                    reff_vote.child(ds1.getKey()).child(candi_id_detail).setValue(0);
+                                    flag=true;
+                                    Toast.makeText(getContext(), "Candidate is Eligible For live Vote!", Toast.LENGTH_LONG).show();
+                                    break;
+
+                                }
+                            }
+                            else{
+                                System.out.println("its other");
+                                flag=false;
+                            }
                         }
+
 
                     }
                 }
@@ -281,22 +335,23 @@ public class candi_detail_faculty_acc extends Fragment {
                 finally {
 
                 }
-//                if (!flag){
-//                    int new_count=count_vot_obj+1;
-//                    voting_id="voting_"+new_count;
-//                    if (dataSnapshot.hasChild(voting_id)){
-//                        int new_count1=count_vot_obj+2;
-//                        voting_id="voting_"+new_count1;
-//                    }
-//                    reff_vote.child(voting_id).child("year").setValue(year_test);
-//                    reff_vote.child(voting_id).child("dept").setValue(dept_test);
-//                    reff_vote.child(voting_id).child("block").setValue(block_test);
-//                    reff_vote.child(voting_id).child("position").setValue(position_test);
-//                    reff_vote.child(voting_id).child("voting_status").setValue("off");
-//                    reff_vote.child(voting_id).child(candi_id_detail).setValue(0);
-//                    flag=true;
-//                }
-//                else {}
+                if (!flag){
+                    int new_count=count_vot_obj+1;
+                    voting_id="voting_"+new_count;
+                    System.out.println("Its Online voting-->"+count_vot_obj);
+                    if (dataSnapshot.hasChild(voting_id)){
+                        int new_count1=count_vot_obj+2;
+                        voting_id="voting_"+new_count1;
+                    }
+                    System.out.println(voting_id);
+                    reff_vote_finalize.child(voting_id).child("year").setValue(year_test);
+                    reff_vote_finalize.child(voting_id).child("dept").setValue(dept_test);
+                    reff_vote_finalize.child(voting_id).child("block").setValue(block_test);
+                    reff_vote_finalize.child(voting_id).child("position").setValue(position_test);
+                    reff_vote_finalize.child(voting_id).child("voting_status").setValue("off");
+                    reff_vote_finalize.child(voting_id).child(candi_id_detail).setValue(0);
+                }
+                else {}
             }
 
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mad_project.R;
+import com.example.mad_project.ui.faculty_access.register_candi_form;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +40,7 @@ public class HomeFragment extends Fragment {
         post_data=new ArrayList<>();
 
         ListView listView=root.findViewById(R.id.list_of_post);
-        adapter=new post_adapter(getContext(),post_data);
+        adapter=new post_adapter(getContext(),post_data,getParentFragmentManager());
         listView.setAdapter(adapter);
 
         reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
@@ -84,10 +86,8 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
         return root;
 
     }
-
 
 }

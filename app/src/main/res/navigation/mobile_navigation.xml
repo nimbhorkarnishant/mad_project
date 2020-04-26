@@ -17,6 +17,17 @@
         android:name="com.example.mad_project.ui.user_announcement.announcement_fragment"
         android:label="@string/menu_announcement"
         tools:layout="@layout/fragment_announcement_fragment" />
+    <fragment
+        android:id="@+id/nav_election_result"
+        android:name="com.example.mad_project.ui.election_result.election_result_show_frag"
+        android:label="Election Result"
+        tools:layout="@layout/fragment_election_result_show_frag" />
+
+    <fragment
+        android:id="@+id/nav_register_candidate_for_ele"
+        android:name="com.example.mad_project.ui.faculty_access.register_candi_form"
+        android:label="Register As Candidate"
+        tools:layout="@layout/fragment_register_candi_form" />
 
     <fragment
         android:id="@+id/nav_faculty_acces"

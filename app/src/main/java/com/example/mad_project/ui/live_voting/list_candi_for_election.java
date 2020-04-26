@@ -3,6 +3,7 @@ package com.example.mad_project.ui.live_voting;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -106,7 +109,9 @@ public class list_candi_for_election extends Fragment {
 
         button_show_candi=view.findViewById(R.id.button_show_candi);
         tv_mesg=view.findViewById(R.id.election_status_text);
-        String user_access="hod";
+        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("user_detail",MODE_PRIVATE);
+        String user_access=sharedPreferences.getString("user_access","");
+
 
         final ListView listView=view.findViewById(R.id.list_of_candi);
         adpater=new selected_candi_adpter(getContext(),register_candi_list_selected);
@@ -134,7 +139,7 @@ public class list_candi_for_election extends Fragment {
         });
 
 
-        if (!user_access.equals("hod")){
+        if (!user_access.equals("faculty")){
             button_show_candi.setVisibility(View.GONE);
         }
         else {}
@@ -273,31 +278,40 @@ public class list_candi_for_election extends Fragment {
                 System.out.println(count);
                 System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
                 for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                    String year_candi_test=ds1.child("candi_year").getValue().toString();
-                    String dept_candi_test=ds1.child("candi_dept").getValue().toString();
-                    String block_candi_test=ds1.child("candi_block").getValue().toString();
-                    String pos_candi_test=ds1.child("candi_pos").getValue().toString();
-                    String selected_as_candi= ds1.child("selected_for_live_vote").getValue().toString();
-                    System.out.println("kkkk"+"  "+selected_as_candi);
-                    if (pos_candi.equals("CR")){
-                        if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) && block_candi_test.equals(block_candi) &&
-                                pos_candi_test.equals(pos_candi) && selected_as_candi.equals("Yes"))
-                        {
-                            register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
-                                    ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                    ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                    try {
+                        String year_candi_test=ds1.child("candi_year").getValue().toString();
+                        String dept_candi_test=ds1.child("candi_dept").getValue().toString();
+                        String block_candi_test=ds1.child("candi_block").getValue().toString();
+                        String pos_candi_test=ds1.child("candi_pos").getValue().toString();
+                        String selected_as_candi= ds1.child("selected_for_live_vote").getValue().toString();
+                        System.out.println("kkkk"+"  "+selected_as_candi);
+                        if (pos_candi.equals("CR")){
+                            if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) && block_candi_test.equals(block_candi) &&
+                                    pos_candi_test.equals(pos_candi) && selected_as_candi.equals("Yes"))
+                            {
+                                register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
+                                        ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
+                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                            }
+                        }
+                        else {
+                            if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) &&
+                                    pos_candi_test.equals(pos_candi) && selected_as_candi.equals("Yes"))
+                            {
+                                register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
+                                        ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
+                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                            }
+
                         }
                     }
-                    else {
-                        if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi) &&
-                                pos_candi_test.equals(pos_candi) && selected_as_candi.equals("Yes"))
-                        {
-                            register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
-                                    ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                    ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
-                        }
+                    catch (Exception e){
 
                     }
+                    finally {
+
+                    }
+
 
 
                 }

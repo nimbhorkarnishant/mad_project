@@ -3,6 +3,7 @@ package com.example.mad_project.ui.live_voting;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +63,9 @@ public class candidate_info_election extends Fragment {
     int candidate_vote_count;
     boolean flag_ex;
     TextView text_meaasge_replace_button;
+    String  year_candi_test,dept_candi_test,block_candi_test,pos_candi_test;
+    String user_id,user_block,user_dept,user_year;
+
 
 
 
@@ -113,6 +122,11 @@ public class candidate_info_election extends Fragment {
         candi_pos=v.findViewById(R.id.candi_pos);
         candi_id_tv=v.findViewById(R.id.candi_id);
         text_meaasge_replace_button=v.findViewById(R.id.tv_replace_button);
+        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("user_detail",MODE_PRIVATE);
+        user_id=sharedPreferences.getString("user_id","");
+        user_block=sharedPreferences.getString("user_block","");
+        user_dept=sharedPreferences.getString("user_dept","");
+        user_year=sharedPreferences.getString("user_year","");
 
         object_candi=(selected_candi_obj)getArguments().getSerializable("candi_obj");
 
@@ -124,37 +138,48 @@ public class candidate_info_election extends Fragment {
                 System.out.println("------------------------------- database -----------------------------");
                 System.out.println(count);
                 for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                    String year_candi_test=ds1.child("year").getValue().toString();
-                    String dept_candi_test=ds1.child("dept").getValue().toString();
-                    String block_candi_test=ds1.child("block").getValue().toString();
-                    String pos_candi_test=ds1.child("position").getValue().toString();
-                    if (object_candi.candi_pos.equals("CR")){
-                        if (year_candi_test.equals(object_candi.candi_year) && dept_candi_test.equals(object_candi.candi_dept)
-                                && block_candi_test.equals(object_candi.candi_block)){
-                            parent_key =ds1.getKey();
-                            candidate_vote_count=ds1.child(object_candi.candidate_id).getValue(Integer.class);
-                            if (ds1.child("voting_status").getValue().toString().equals("off")){
-                                button_update_candi.setVisibility(View.GONE);
+                    year_candi_test=ds1.child("year").getValue().toString();
+                    dept_candi_test=ds1.child("dept").getValue().toString();
+                    block_candi_test=ds1.child("block").getValue().toString();
+                    pos_candi_test=ds1.child("position").getValue().toString();
+                    ds1.child("users").getValue(Object.class);
+
+                    try {
+                        if (object_candi.candi_pos.equals("CR")){
+                            if (year_candi_test.equals(object_candi.candi_year) && dept_candi_test.equals(object_candi.candi_dept)
+                                    && block_candi_test.equals(object_candi.candi_block)){
+                                parent_key =ds1.getKey();
+                                candidate_vote_count=ds1.child(object_candi.candidate_id).getValue(Integer.class);
+                                if (ds1.child("voting_status").getValue().toString().equals("off")){
+                                    button_update_candi.setVisibility(View.GONE);
+                                }
+                                else{
+                                    check_user_voted();
+                                }
                             }
-                            else{
-                                check_user_voted();
-                            }
+                            else {}
                         }
-                        else {}
+                        else {
+                            if (year_candi_test.equals(object_candi.candi_year) && dept_candi_test.equals(object_candi.candi_dept)){
+                                parent_key =ds1.getKey();
+                                if (ds1.child("voting_status").getValue().toString().equals("off")){
+                                    button_update_candi.setVisibility(View.GONE);
+                                }
+                                else{
+                                    check_user_voted();
+                                }
+                            }
+                            else {}
+
+                        }
                     }
-                    else {
-                        if (year_candi_test.equals(object_candi.candi_year) && dept_candi_test.equals(object_candi.candi_dept)){
-                            parent_key =ds1.getKey();
-                            if (ds1.child("voting_status").getValue().toString().equals("off")){
-                                button_update_candi.setVisibility(View.GONE);
-                            }
-                            else{
-                                check_user_voted();
-                            }
-                        }
-                        else {}
+                    catch (Exception e){
 
                     }
+                    finally {
+
+                    }
+
 
                 }
 
@@ -175,7 +200,34 @@ public class candidate_info_election extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                vote_for_candidate();
+                                try {
+                                    if (object_candi.candi_pos.equals("CR")){
+                                        if (year_candi_test.equals(user_year) && dept_candi_test.equals(user_dept)
+                                                && block_candi_test.equals(user_block)){
+                                            vote_for_candidate();
+                                        }
+                                        else {
+                                            Toast.makeText(getContext(), "Sorry You Are not Eligible For this Election!", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }
+                                    else {
+                                        if (year_candi_test.equals(user_year) && dept_candi_test.equals(user_dept)){
+                                            vote_for_candidate();
+                                        }
+                                        else {
+                                            Toast.makeText(getContext(), "Sorry You Are not Eligible For this Election!", Toast.LENGTH_LONG).show();
+
+                                        }
+
+                                    }
+                                }
+                                catch (Exception e){
+
+                                }
+                                finally {
+
+                                }
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -208,6 +260,7 @@ public class candidate_info_election extends Fragment {
     }
 
     public void check_user_voted(){
+
         DatabaseReference vote= FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting").child(parent_key).child("users");
         vote.addValueEventListener(new ValueEventListener() {
             @Override
@@ -216,8 +269,7 @@ public class candidate_info_election extends Fragment {
                 System.out.println(count);
                 for (DataSnapshot ds1:dataSnapshot.getChildren()){
                     // System.out.println("------------------------------- database -----------------------------");
-                    System.out.println(ds1.getValue().toString());
-                    if (ds1.getValue().toString().equals("user_5")){
+                    if (ds1.getValue().toString().equals(user_id)){
                         button_update_candi.setVisibility(View.GONE);
                         text_meaasge_replace_button.setText("You Already Voted So now you cannot vote!!");
                         text_meaasge_replace_button.setTextColor(Color.RED);
@@ -234,10 +286,11 @@ public class candidate_info_election extends Fragment {
     }
 
     public void vote_for_candidate(){
+
         FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
                     .child(parent_key).child(object_candi.candidate_id).setValue(candidate_vote_count+1);
         FirebaseDatabase.getInstance().getReference().child("mad_project").child("online_voting")
-                    .child(parent_key).child("users").child("user_5").setValue("user_5");
+                    .child(parent_key).child("users").child(user_id).setValue(user_id);
         Toast.makeText(getContext(), "Your Vote is Consider!", Toast.LENGTH_LONG).show();
 
     }
