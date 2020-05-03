@@ -3,6 +3,7 @@ package com.example.mad_project.ui.live_voting;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -65,6 +66,7 @@ public class candidate_info_election extends Fragment {
     TextView text_meaasge_replace_button;
     String  year_candi_test,dept_candi_test,block_candi_test,pos_candi_test;
     String user_id,user_block,user_dept,user_year;
+    Button resume_see;
 
 
 
@@ -122,6 +124,7 @@ public class candidate_info_election extends Fragment {
         candi_pos=v.findViewById(R.id.candi_pos);
         candi_id_tv=v.findViewById(R.id.candi_id);
         text_meaasge_replace_button=v.findViewById(R.id.tv_replace_button);
+        resume_see=v.findViewById(R.id.resume_see_button);
         SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("user_detail",MODE_PRIVATE);
         user_id=sharedPreferences.getString("user_id","");
         user_block=sharedPreferences.getString("user_block","");
@@ -257,6 +260,18 @@ public class candidate_info_election extends Fragment {
         candi_id_tv.setText(object_candi.candidate_id);
         candi_email_id=object_candi.candi_email;
         candi_pos_email=object_candi.candi_pos;
+        resume_see.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent();
+                intent.setType(Intent.ACTION_VIEW_LOCUS);
+                Uri link=Uri.parse(object_candi.resume_link);
+                System.out.println("here-- link "+link);
+                intent.setData(link);
+                startActivity(intent);
+            }
+        });
     }
 
     public void check_user_voted(){

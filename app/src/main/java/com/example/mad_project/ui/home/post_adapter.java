@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mad_project.R;
 import com.example.mad_project.ui.faculty_access.register_candi_form;
+import com.example.mad_project.ui.user_authentication.user;
 
 import java.util.ArrayList;
 public class post_adapter extends BaseAdapter {
@@ -24,11 +25,14 @@ public class post_adapter extends BaseAdapter {
     private ArrayList<post_obj> list_data;
     static public Button register_button;
     FragmentManager manager;
+    public ArrayList<user> user_data_post;
+    public ArrayList<user>user_detail_post;
 
-    public post_adapter(Context context, ArrayList list_data,FragmentManager manager) {
+    public post_adapter(Context context, ArrayList list_data,FragmentManager manager,ArrayList<user> user_data_post) {
         this.context=context;
         this.list_data=list_data;
         this.manager=manager;
+        this.user_data_post=user_data_post;
 
     }
 
@@ -65,6 +69,9 @@ public class post_adapter extends BaseAdapter {
         post_content.setText(list_data.get(position).post_content);
         post_date.setText(list_data.get(position).post_date);
         post_time.setText(list_data.get(position).post_time);
+        System.out.println("adapter post detail-->"+user_data_post);
+        user_name.setText(user_data_post.get(position).full_name);
+        user_post.setText(user_data_post.get(position).user_access+" of "+user_data_post.get(position).user_dept);
         if (!list_data.get(position).register_button.equals("true")){
             register_button.setVisibility(View.GONE);
             register_button_text_bool.setVisibility(View.GONE);
@@ -86,8 +93,7 @@ public class post_adapter extends BaseAdapter {
             });
         }
         //user_name.setText(list_data.get(position).post_title);
-        user_name.setText("Rahul jain");
-        user_post.setText("HOD of SCET");
+
 
         return view;
     }

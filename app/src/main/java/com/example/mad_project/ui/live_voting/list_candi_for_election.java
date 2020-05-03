@@ -291,7 +291,7 @@ public class list_candi_for_election extends Fragment {
                             {
                                 register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
                                         ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString(),ds1.child("resume_link").getValue().toString()));
                             }
                         }
                         else {
@@ -300,7 +300,7 @@ public class list_candi_for_election extends Fragment {
                             {
                                 register_candi_list_selected.add(new selected_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
                                         ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                                        ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString(),ds1.child("resume_link").getValue().toString()));
                             }
 
                         }

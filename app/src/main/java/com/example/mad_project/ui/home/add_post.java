@@ -1,6 +1,7 @@
 package com.example.mad_project.ui.home;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.mad_project.ui.home.HomeFragment.post_id;
 
 
@@ -58,6 +60,7 @@ public class add_post extends Fragment {
   // String post_id;
     int count_obj=3;
     post_obj new_post_obj;
+    SharedPreferences sharedPreferences;
 
 
 
@@ -100,6 +103,9 @@ public class add_post extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        sharedPreferences=getContext().getSharedPreferences("user_detail", MODE_PRIVATE);
+        System.out.println("bbbbbbbbbbbbbbb-->"+sharedPreferences.getString("user_id",""));
+
         //spinner.setOnItemSelectedListener(this);
         title=v.findViewById(R.id.post_title);
         content=v.findViewById(R.id.post_Content);
@@ -126,7 +132,7 @@ public class add_post extends Fragment {
         String post_content=content.getText().toString();
         boolean isChecked = ((CheckBox)register_button).isChecked();
         String position = candidate_position.getSelectedItem().toString();
-        String user_id="1";
+        String user_id=sharedPreferences.getString("user_id","");
         String register_button_text;
         if (isChecked){
             register_button_text="true";

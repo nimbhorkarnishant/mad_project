@@ -1,17 +1,21 @@
 package com.example.mad_project.ui.faculty_access;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.system.ErrnoException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mad_project.ui.home.post_obj;
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +41,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.example.mad_project.MainActivity;
 import com.example.mad_project.R;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.xml.sax.ErrorHandler;
+
+import java.io.IOException;
+import java.net.URI;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -59,11 +73,9 @@ public class register_candi_form extends Fragment  {
 
     private OnFragmentInteractionListener mListener;
     Button select,Register;
-    TextView notification;
     Uri pdfUri;
 
-    FirebaseStorage storage;
-    FirebaseDatabase database;
+
     private  final String[] year = {"Select Year","FE", "SY", "TY","Btech"};
     private  final String[] department = {"Select Department","FE","SCET", "SMEC", "CHEMICAL","ETC"};
     private  final String[] block = {"Select Block","A", "B", "C","D","E","F","G","H"};
@@ -72,6 +84,16 @@ public class register_candi_form extends Fragment  {
     Spinner spinner_dept,spinner_year,spinner_block;
     DatabaseReference reff;
     public String candi_id,name,prn,email,dob1,dept,candi_year,candi_block,post_position;
+    Button btn_filePicker;
+    TextView txt_pathShow;
+    Intent myFileIntent;
+    private static final int PICK_IMAGE_REQUEST = 234;
+    private Uri filePath;
+    StorageReference storageReference;
+    String resume_link;
+    Uri link_url;
+    FirebaseStorage storage;
+
 
 
 
@@ -130,12 +152,9 @@ public class register_candi_form extends Fragment  {
         adapter_block.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_block.setAdapter(adapter_block);
 
-        storage=FirebaseStorage.getInstance();
-        database= FirebaseDatabase.getInstance();
-
-        select=view.findViewById(R.id.select);
+        btn_filePicker=view.findViewById(R.id.btn_filePicker);
         Register=view.findViewById(R.id.Register);
-        notification=view.findViewById(R.id.notification);
+        txt_pathShow=view.findViewById(R.id.txt_path);
 
         full_name=view.findViewById(R.id.editText);
         prn_no=view.findViewById(R.id.editText3);
@@ -165,16 +184,15 @@ public class register_candi_form extends Fragment  {
 
         });
 
-        select.setOnClickListener(new View.OnClickListener() {
+        btn_filePicker.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick (View view){
+                myFileIntent=new Intent();
+                myFileIntent.setType("application/pdf");
+                myFileIntent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(myFileIntent,"Select Pdf File"),PICK_IMAGE_REQUEST);
 
-                if(ContextCompat.checkSelfPermission( getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED)
-                {
-                    selectPdf();
-                }
-                else
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},9);
+
             }
         });
 
@@ -187,8 +205,6 @@ public class register_candi_form extends Fragment  {
 
             }
         });
-
-
         return view;
     }
 
@@ -215,63 +231,98 @@ public class register_candi_form extends Fragment  {
 
         }
         else{
-            try {
-                System.out.println("id----------->"+candi_id);
-                register_candi_obj new_obj = new register_candi_obj(name,prn,email,dob1,dept,candi_year,candi_block,candi_id,post_position);
-                FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election")
-                        .child(candi_id).setValue(new_obj);
-                String text_subject="Candidate Registration ";
-                String text_content="Thank You! You are Register for "+post_position+" Post Successufully! Further Instruction will send you " +
-                        "to your email id about the Interview process.";
-                JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),email,text_subject,text_content);
-                javaMailAPI.execute();
-                Toast.makeText(getContext(),"Candidate Register Sucessfully",Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e){
-
-            }
-            finally {
-            }
-
-
+            upload(filePath);
         }
 
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if(requestCode==9 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
-        {
-            selectPdf();
-        }
-        else{
-            Toast.makeText(getContext(),"please provide permission..",Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
-
-    private void selectPdf() {
-
-        Intent intent=new Intent();
-        intent.setType("application/pdf");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,86);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 86 && resultCode == RESULT_OK && data != null)
-        {
-            pdfUri=data.getData();
-        }
-        else {
-            Toast.makeText(getContext(),"Please select the  file",Toast.LENGTH_SHORT).show();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            System.out.println("url----------------------->"+filePath);
+            txt_pathShow.setText(filePath.toString());
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+//                //imageView.setImageBitmap(bitmap);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
+
+
+    public void upload(Uri file_data){
+        if (filePath != null) {
+            //displaying a progress dialog while upload is going on
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+            storageReference =FirebaseStorage.getInstance().getReference();
+            StorageReference riversRef = storageReference.child("images/resume"+candi_id+".pdf");
+            riversRef.putFile(file_data)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            Task<Uri> uri_link= taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uri_link.isComplete());
+                            link_url=uri_link.getResult();
+                            resume_link=link_url.toString();
+                            System.out.println("link dekhooooooooooooooooooo--> "+resume_link);
+
+                            progressDialog.dismiss();
+                            //and displaying a success toast
+                            try {
+                                System.out.println("id----------->"+candi_id);
+                                System.out.println("resume___link___----------->"+resume_link);
+                                register_candi_obj new_obj = new register_candi_obj(name,prn,email,dob1,dept,candi_year,candi_block,candi_id,post_position,resume_link);
+                                FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election")
+                                        .child(candi_id).setValue(new_obj);
+                                String text_subject="Candidate Registration ";
+                                String text_content="Thank You! You are Register for "+post_position+" Post Successufully! Further Instruction will send you " +
+                                        "to your email id about the Interview process.";
+                                JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),email,text_subject,text_content);
+                                javaMailAPI.execute();
+                                Toast.makeText(getContext(),"Candidate Register Sucessfully",Toast.LENGTH_SHORT).show();
+                            }
+                            catch (Exception e){
+
+                            }
+                            finally {
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+
+                            //and displaying error message
+                            Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //calculating progress percentage
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                            //displaying percentage in progress dialog
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+
+                    });
+        }
+        //if there is not any file
+        else {
+            Toast.makeText(getContext(),"File is empty",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

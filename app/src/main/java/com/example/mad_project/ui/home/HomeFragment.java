@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mad_project.R;
 import com.example.mad_project.ui.faculty_access.register_candi_form;
+import com.example.mad_project.ui.user_authentication.user;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,9 +29,13 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private post_adapter adapter;
+    private post_adapter adapter_user;
     DatabaseReference reff;
     ArrayList<post_obj> post_data;
     static String post_id;
+    ArrayList<post_obj> post_data_sort;
+    public  ArrayList<user> user_detail_post;
+
     int count;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,9 +43,10 @@ public class HomeFragment extends Fragment {
         TextView textView = root.findViewById(R.id.text_home);
         textView.setText("Announcements");
         post_data=new ArrayList<>();
-
+        post_data_sort=new ArrayList<>();
+        user_detail_post=new ArrayList<>();
         ListView listView=root.findViewById(R.id.list_of_post);
-        adapter=new post_adapter(getContext(),post_data,getParentFragmentManager());
+        adapter=new post_adapter(getContext(),post_data,getParentFragmentManager(),user_detail_post);
         listView.setAdapter(adapter);
 
         reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
@@ -55,7 +61,9 @@ public class HomeFragment extends Fragment {
                             ds1.child("register_button").getValue().toString(),ds1.child("user_id").getValue().toString(),
                             ds1.child("post_date").getValue().toString(),ds1.child("post_time").getValue().toString(),
                             ds1.child("post_candidatepost").getValue().toString());
-                    post_data.add(obj);
+                    //post_data.add(obj);
+                    post_data_sort.add(obj);
+
                 }
                 int new_count=count+1;
                 post_id="post_"+new_count;
@@ -63,8 +71,13 @@ public class HomeFragment extends Fragment {
                     int new_count1=count+2;
                     post_id="post_"+new_count1;
                 }
-
-                adapter.notifyDataSetChanged();
+                System.out.println("bhaiiii-------------->");
+                for (int j = post_data_sort.size()-1;j>=0;j--){
+                    System.out.println("haannnn--->"+j);
+                    post_data.add(post_data_sort.get(j));
+                }
+                user_detail();
+                System.out.println("dta afetr use-->"+user_detail_post);
             }
 
             @Override
@@ -87,6 +100,37 @@ public class HomeFragment extends Fragment {
             }
         });
         return root;
+
+    }
+
+    public void user_detail(){
+        for (int i=0;i<post_data.size();i++){
+            DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_sort.get(i).user_id);
+            reff.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    count = (int) dataSnapshot.getChildrenCount();
+                    System.out.println(count);
+                    System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
+                    String user_name=dataSnapshot.child("full_name").getValue().toString();
+                    String user_prn=dataSnapshot.child("prn_no").getValue().toString();
+                    String user_access=dataSnapshot.child("user_access").getValue().toString();
+                    String user_block=dataSnapshot.child("user_block").getValue().toString();
+                    String user_dept=dataSnapshot.child("user_dept").getValue().toString();
+                    String user_id=dataSnapshot.child("user_id").getValue().toString();
+                    String user_year=dataSnapshot.child("user_year").getValue().toString();
+                    user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
+                    adapter.notifyDataSetChanged();
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
 
     }
 

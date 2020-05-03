@@ -9,15 +9,18 @@ import android.widget.TextView;
 
 import com.example.mad_project.R;
 import com.example.mad_project.ui.home.post_obj;
+import com.example.mad_project.ui.user_authentication.user;
 
 import java.util.ArrayList;
 
 public class announcement_post_adapter extends BaseAdapter {
     private Context context;
     private ArrayList<post_obj> list_data;
-    public announcement_post_adapter(Context context, ArrayList list_data) {
+    public ArrayList<user>user_data_post;
+    public announcement_post_adapter(Context context, ArrayList list_data,ArrayList<user> user_data_post) {
         this.context=context;
         this.list_data=list_data;
+        this.user_data_post=user_data_post;
     }
 
 
@@ -54,6 +57,9 @@ public class announcement_post_adapter extends BaseAdapter {
         post_content.setText(list_data.get(position).post_content);
         post_date.setText(list_data.get(position).post_date);
         post_time.setText(list_data.get(position).post_time);
+        user_name.setText(user_data_post.get(position).full_name);
+        user_post.setText(user_data_post.get(position).user_access+" of "+user_data_post.get(position).user_dept);
+
         if (list_data.get(position).register_button.equals("true")){
             register_button.setVisibility(View.GONE);
             register_button_text_bool.setText("Register Button : Yes");
@@ -65,9 +71,6 @@ public class announcement_post_adapter extends BaseAdapter {
 
         }
         //user_name.setText(list_data.get(position).post_title);
-        user_name.setText("Rahul jain");
-        user_post.setText("HOD of SCET");
-
         return view;
     }
 }

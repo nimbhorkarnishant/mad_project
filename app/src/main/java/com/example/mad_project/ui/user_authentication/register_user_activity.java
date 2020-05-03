@@ -63,7 +63,6 @@ public class register_user_activity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
         }
-
 //        if(fAuth.getCurrentUser() != null){
 //            System.out.println("i am cimmmmmmmmmmmmmmmmmmmmmmmmmmm");
 //            finish();

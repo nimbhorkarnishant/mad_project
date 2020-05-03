@@ -127,12 +127,13 @@
         app:layout_constraintTop_toBottomOf="@+id/Spinner3" />
 
     <Button
-        android:id="@+id/select"
-        android:layout_width="101dp"
+        android:id="@+id/btn_filePicker"
+        android:layout_width="180dp"
         android:layout_height="35dp"
-        android:text="Select file"
+        android:text="Pick file"
         android:background="#E91E63"
         android:textColor="#FFF"
+        android:layout_marginRight="160dp"
         app:layout_constraintBottom_toTopOf="@+id/Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.309"
@@ -141,14 +142,16 @@
         app:layout_constraintVertical_bias="0.391" />
 
     <TextView
-        android:id="@+id/notification"
-        android:layout_width="131dp"
-        android:layout_height="33dp"
-        android:text="Notification"
+        android:id="@+id/txt_path"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="Resume"
+        android:layout_marginLeft="30dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.301"
-        app:layout_constraintStart_toEndOf="@+id/select"
+        app:layout_constraintStart_toEndOf="@+id/btn_filePicker"
         app:layout_constraintTop_toBottomOf="@+id/Spinner3"
         app:layout_constraintVertical_bias="0.404" />
 

@@ -3,6 +3,7 @@ package com.example.mad_project.ui.faculty_access;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -60,6 +61,7 @@ public class candi_detail_faculty_acc extends Fragment {
     String voting_id;
     Boolean flag;
     int count_vot_obj;
+    Button see_resume;
     public candi_detail_faculty_acc() {
         // Required empty public constructor
     }
@@ -110,6 +112,7 @@ public class candi_detail_faculty_acc extends Fragment {
         candi_block=v.findViewById(R.id.candi_block);
         candi_pos=v.findViewById(R.id.candi_pos);
         candi_id_tv=v.findViewById(R.id.candi_id);
+        see_resume=v.findViewById(R.id.resume_see_button);
 
         DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election");
         reff.addValueEventListener(new ValueEventListener() {
@@ -124,7 +127,7 @@ public class candi_detail_faculty_acc extends Fragment {
                         System.out.println("--- hello---");
                         register_candi_list_new.add(new register_candi_obj(ds1.child("candi_name").getValue().toString(),ds1.child("candi_prn_no").getValue().toString(),ds1.child("candi_email").getValue().toString(),
                                ds1.child("candi_dob").getValue().toString(),ds1.child("candi_dept").getValue().toString(),ds1.child("candi_year").getValue().toString(),
-                                ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString()));
+                                ds1.child("candi_block").getValue().toString(),ds1.child("candidate_id").getValue().toString(),ds1.child("candi_pos").getValue().toString(),ds1.child("resume_link").getValue().toString()));
                         break;
 
                     }
@@ -162,6 +165,19 @@ public class candi_detail_faculty_acc extends Fragment {
             block_test=register_candi_list_new.get(0).candi_block;
             dept_test=register_candi_list_new.get(0).candi_dept;
             position_test=register_candi_list_new.get(0).candi_pos;
+
+            see_resume.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent();
+                    intent.setType(Intent.ACTION_VIEW_LOCUS);
+                    Uri link=Uri.parse(register_candi_list_new.get(0).resume_link);
+                    System.out.println("here-- link "+link);
+                    intent.setData(link);
+                    startActivity(intent);
+                }
+            });
         }
         catch (Exception e){
 

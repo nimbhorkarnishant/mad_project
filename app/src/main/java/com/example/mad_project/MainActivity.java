@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (user_access.equals("faculty")){
                 }
+                else if (user_access.equals("HOD")){
+
+                }
                 else{
                     menu.removeItem(R.id.nav_faculty_acces);
                 }

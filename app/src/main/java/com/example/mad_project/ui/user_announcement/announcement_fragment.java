@@ -3,6 +3,7 @@ package com.example.mad_project.ui.user_announcement;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import com.example.mad_project.R;
 import com.example.mad_project.ui.home.add_post;
 import com.example.mad_project.ui.home.post_adapter;
 import com.example.mad_project.ui.home.post_obj;
+import com.example.mad_project.ui.user_authentication.user;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +41,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -59,6 +63,9 @@ public class announcement_fragment extends Fragment {
     ArrayList<post_obj> post_data_announce;
     DatabaseReference reff;
     String post_id_delete;
+    ArrayList<post_obj> post_data_announce_sort;
+    SharedPreferences sharedPreferences;
+    ArrayList<user> user_detail_post;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -105,12 +112,15 @@ public class announcement_fragment extends Fragment {
         TextView textView = root.findViewById(R.id.text_home);
         textView.setText("Your Announcements");
         post_data_announce=new ArrayList<>();
+        post_data_announce_sort=new ArrayList<>();
+        user_detail_post=new ArrayList<>();
         FloatingActionButton add_post_buuton=root.findViewById(R.id.add_post);
         add_post_buuton.setVisibility(View.GONE);
 
         final ListView listView=root.findViewById(R.id.list_of_post);
-        adapter=new announcement_post_adapter(getContext(),post_data_announce);
+        adapter=new announcement_post_adapter(getContext(),post_data_announce,user_detail_post);
         listView.setAdapter(adapter);
+        sharedPreferences=getContext().getSharedPreferences("user_detail", MODE_PRIVATE);
 
         reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
         reff.addValueEventListener(new ValueEventListener() {
@@ -120,22 +130,27 @@ public class announcement_fragment extends Fragment {
                 System.out.println(count);
 
                 for (DataSnapshot ds1:dataSnapshot.getChildren()){
-                    if (ds1.child("user_id").getValue().toString().equals("1")){
+                    if (ds1.child("user_id").getValue().toString().equals(sharedPreferences.getString("user_id",""))){
                         post_obj obj=new post_obj(ds1.child("post_id").getValue().toString(),ds1.child("post_title").getValue().toString(),ds1.child("post_content").getValue().toString(),
                                 ds1.child("register_button").getValue().toString(),ds1.child("user_id").getValue().toString(),
                                 ds1.child("post_date").getValue().toString(),ds1.child("post_time").getValue().toString(),
                                 ds1.child("post_candidatepost").getValue().toString());
-                        post_data_announce.add(obj);
+                        //post_data_announce.add(obj);
+                        post_data_announce_sort.add(obj);
                     }
                     else {
 
                     }
                 }
-                if (post_data_announce.size()==0){
+                if (post_data_announce_sort.size()==0){
                     Toast.makeText(getContext(), "Sorry we didn't Found any Announcment you Made!", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    adapter.notifyDataSetChanged();
+                    for (int j = post_data_announce_sort.size()-1;j>=0;j--){
+                        System.out.println("haannnn--->"+j);
+                        post_data_announce.add(post_data_announce_sort.get(j));
+                    }
+                    user_detail();
                 }
 
             }
@@ -210,6 +225,37 @@ public class announcement_fragment extends Fragment {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+    public void user_detail(){
+        for (int i=0;i<post_data_announce.size();i++){
+            DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_announce.get(i).user_id);
+            reff.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    count = (int) dataSnapshot.getChildrenCount();
+//                    System.out.println(count);
+                    System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
+                    String user_name=dataSnapshot.child("full_name").getValue().toString();
+                    String user_prn=dataSnapshot.child("prn_no").getValue().toString();
+                    String user_access=dataSnapshot.child("user_access").getValue().toString();
+                    String user_block=dataSnapshot.child("user_block").getValue().toString();
+                    String user_dept=dataSnapshot.child("user_dept").getValue().toString();
+                    String user_id=dataSnapshot.child("user_id").getValue().toString();
+                    String user_year=dataSnapshot.child("user_year").getValue().toString();
+                    user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
+                    adapter.notifyDataSetChanged();
+
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+
     }
 
 
