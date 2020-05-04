@@ -1,6 +1,7 @@
 package com.example.mad_project.ui.user_announcement;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -56,6 +58,7 @@ public class update_post extends Fragment {
     // String post_id;
     int count_obj=3;
     post_obj new_post_obj;
+    SharedPreferences sharedPreferences;
 
     private OnFragmentInteractionListener mListener;
 
@@ -141,7 +144,9 @@ public class update_post extends Fragment {
         String post_content=content.getText().toString();
         boolean isChecked = ((CheckBox)register_button).isChecked();
         String position = candidate_position.getSelectedItem().toString();
-        String user_id="1";
+        sharedPreferences=getContext().getSharedPreferences("user_detail", MODE_PRIVATE);
+
+        String user_id=sharedPreferences.getString("user_id","");
         String register_button_text;
         if (isChecked){
             register_button_text="true";

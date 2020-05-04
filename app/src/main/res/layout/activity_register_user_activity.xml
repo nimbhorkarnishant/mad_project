@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="College Poll App"
+        android:text="College Election App"
         android:textColor="#E91E63"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -129,6 +129,8 @@
         android:fontFamily=""
         android:text="Register"
         android:textSize="13sp"
+        android:textColor="#FFF"
+        android:background="#E91E63"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prn" />

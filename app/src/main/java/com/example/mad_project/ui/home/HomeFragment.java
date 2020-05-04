@@ -1,6 +1,7 @@
 package com.example.mad_project.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.mad_project.ui.home.post_obj;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.ArrayList;
+
+import static com.example.mad_project.ui.user_authentication.register_user_activity.TAG;
 
 
 public class HomeFragment extends Fragment {
@@ -104,34 +108,42 @@ public class HomeFragment extends Fragment {
     }
 
     public void user_detail(){
-        for (int i=0;i<post_data.size();i++){
-            DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_sort.get(i).user_id);
-            reff.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    count = (int) dataSnapshot.getChildrenCount();
-                    System.out.println(count);
-                    System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
-                    String user_name=dataSnapshot.child("full_name").getValue().toString();
-                    String user_prn=dataSnapshot.child("prn_no").getValue().toString();
-                    String user_access=dataSnapshot.child("user_access").getValue().toString();
-                    String user_block=dataSnapshot.child("user_block").getValue().toString();
-                    String user_dept=dataSnapshot.child("user_dept").getValue().toString();
-                    String user_id=dataSnapshot.child("user_id").getValue().toString();
-                    String user_year=dataSnapshot.child("user_year").getValue().toString();
-                    user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
-                    adapter.notifyDataSetChanged();
+        try {
+            for (int i=0;i<post_data.size();i++){
+                DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_sort.get(i).user_id);
+                reff.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        count = (int) dataSnapshot.getChildrenCount();
+                        System.out.println(count);
+                        System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
+                        String user_name=dataSnapshot.child("full_name").getValue().toString();
+                        String user_prn=dataSnapshot.child("prn_no").getValue().toString();
+                        String user_access=dataSnapshot.child("user_access").getValue().toString();
+                        String user_block=dataSnapshot.child("user_block").getValue().toString();
+                        String user_dept=dataSnapshot.child("user_dept").getValue().toString();
+                        String user_id=dataSnapshot.child("user_id").getValue().toString();
+                        String user_year=dataSnapshot.child("user_year").getValue().toString();
+                        user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
+                        adapter.notifyDataSetChanged();
 
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
+                    }
 
-            });
+                });
+
+            }
+        }catch (Error error){
+            System.out.println(error);
+
+        }finally {
 
         }
-
     }
+
+
 
 }

@@ -187,13 +187,13 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        System.out.println("count Fragment--->"+getSupportFragmentManager().getBackStackEntryCount());
-//        getSupportFragmentManager().popBackStack();
-//
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.out.println("count Fragment--->"+getSupportFragmentManager().getBackStackEntryCount());
+        getSupportFragmentManager().popBackStack();
+
+    }
 
 
 }
