@@ -147,6 +147,9 @@ public class update_post extends Fragment {
         sharedPreferences=getContext().getSharedPreferences("user_detail", MODE_PRIVATE);
 
         String user_id=sharedPreferences.getString("user_id","");
+        String user_name=sharedPreferences.getString("user_name","");
+        String user_access=sharedPreferences.getString("user_access","");
+        String user_dept=sharedPreferences.getString("user_dept","");
         String register_button_text;
         if (isChecked){
             register_button_text="true";
@@ -188,7 +191,7 @@ public class update_post extends Fragment {
            System.out.println(post_id_update);
             add_post_reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
 
-            new_post_obj=new post_obj(post_id_update,post_title,post_content,register_button_text,user_id,date1,time,position);
+            new_post_obj=new post_obj(post_id_update,post_title,post_content,register_button_text,user_id,date1,time,position,user_name,user_access,user_dept);
             add_post_reff.child(post_id_update).setValue(new_post_obj);
             Toast.makeText(getContext(), "Your Announcement Updated Successfully!", Toast.LENGTH_LONG).show();
         }

@@ -65,7 +65,6 @@ public class announcement_fragment extends Fragment {
     String post_id_delete;
     ArrayList<post_obj> post_data_announce_sort;
     SharedPreferences sharedPreferences;
-    ArrayList<user> user_detail_post;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -113,12 +112,11 @@ public class announcement_fragment extends Fragment {
         textView.setText("Your Announcements");
         post_data_announce=new ArrayList<>();
         post_data_announce_sort=new ArrayList<>();
-        user_detail_post=new ArrayList<>();
         FloatingActionButton add_post_buuton=root.findViewById(R.id.add_post);
         add_post_buuton.setVisibility(View.GONE);
 
         final ListView listView=root.findViewById(R.id.list_of_post);
-        adapter=new announcement_post_adapter(getContext(),post_data_announce,user_detail_post);
+        adapter=new announcement_post_adapter(getContext(),post_data_announce);
         listView.setAdapter(adapter);
         sharedPreferences=getContext().getSharedPreferences("user_detail", MODE_PRIVATE);
 
@@ -134,7 +132,8 @@ public class announcement_fragment extends Fragment {
                         post_obj obj=new post_obj(ds1.child("post_id").getValue().toString(),ds1.child("post_title").getValue().toString(),ds1.child("post_content").getValue().toString(),
                                 ds1.child("register_button").getValue().toString(),ds1.child("user_id").getValue().toString(),
                                 ds1.child("post_date").getValue().toString(),ds1.child("post_time").getValue().toString(),
-                                ds1.child("post_candidatepost").getValue().toString());
+                                ds1.child("post_candidatepost").getValue().toString(), ds1.child("user_name").getValue().toString()
+                        , ds1.child("user_access").getValue().toString(), ds1.child("user_dept").getValue().toString());
                         //post_data_announce.add(obj);
                         post_data_announce_sort.add(obj);
                     }
@@ -150,7 +149,7 @@ public class announcement_fragment extends Fragment {
                         System.out.println("haannnn--->"+j);
                         post_data_announce.add(post_data_announce_sort.get(j));
                     }
-                    user_detail();
+                    adapter.notifyDataSetChanged();
                 }
 
             }
@@ -226,40 +225,6 @@ public class announcement_fragment extends Fragment {
                 return super.onContextItemSelected(item);
         }
     }
-    public void user_detail(){
-        for (int i=0;i<post_data_announce.size();i++){
-            DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_announce.get(i).user_id);
-            reff.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    count = (int) dataSnapshot.getChildrenCount();
-//                    System.out.println(count);
-                    System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
-                    String user_name=dataSnapshot.child("full_name").getValue().toString();
-                    String user_prn=dataSnapshot.child("prn_no").getValue().toString();
-                    String user_access=dataSnapshot.child("user_access").getValue().toString();
-                    String user_block=dataSnapshot.child("user_block").getValue().toString();
-                    String user_dept=dataSnapshot.child("user_dept").getValue().toString();
-                    String user_id=dataSnapshot.child("user_id").getValue().toString();
-                    String user_year=dataSnapshot.child("user_year").getValue().toString();
-                    user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
-                    adapter.notifyDataSetChanged();
-
-
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-
-            });
-
-        }
-
-    }
-
-
-
 
         // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

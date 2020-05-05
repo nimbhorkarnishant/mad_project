@@ -133,6 +133,9 @@ public class add_post extends Fragment {
         boolean isChecked = ((CheckBox)register_button).isChecked();
         String position = candidate_position.getSelectedItem().toString();
         String user_id=sharedPreferences.getString("user_id","");
+        String user_name=sharedPreferences.getString("user_name","");
+        String user_access=sharedPreferences.getString("user_access","");
+        String user_dept=sharedPreferences.getString("user_dept","");
         String register_button_text;
         if (isChecked){
             register_button_text="true";
@@ -173,7 +176,7 @@ public class add_post extends Fragment {
             add_post_reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
             System.out.print("------------------------------- **********************  ");
             System.out.println(post_id);
-            new_post_obj=new post_obj(post_id,post_title,post_content,register_button_text,user_id,date1,time,position);
+            new_post_obj=new post_obj(post_id,post_title,post_content,register_button_text,user_id,date1,time,position,user_name,user_access,user_dept);
             add_post_reff.child(post_id).setValue(new_post_obj);
             Toast.makeText(getContext(), "Your Announcement created Successfully!", Toast.LENGTH_LONG).show();
         }

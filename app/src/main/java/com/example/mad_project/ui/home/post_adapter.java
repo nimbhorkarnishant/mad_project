@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +19,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mad_project.R;
 import com.example.mad_project.ui.faculty_access.register_candi_form;
 import com.example.mad_project.ui.user_authentication.user;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 public class post_adapter extends BaseAdapter {
@@ -25,14 +31,12 @@ public class post_adapter extends BaseAdapter {
     private ArrayList<post_obj> list_data;
     static public Button register_button;
     FragmentManager manager;
-    public ArrayList<user> user_data_post;
-    public ArrayList<user>user_detail_post;
 
-    public post_adapter(Context context, ArrayList list_data,FragmentManager manager,ArrayList<user> user_data_post) {
+    TextView register_button_text_bool,post_title,post_content,user_name,user_post,post_date,post_time;
+    public post_adapter(Context context, ArrayList list_data,FragmentManager manager) {
         this.context=context;
         this.list_data=list_data;
         this.manager=manager;
-        this.user_data_post=user_data_post;
 
     }
 
@@ -55,23 +59,23 @@ public class post_adapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view=View.inflate(context, R.layout.post_costumize_view,null);
-        TextView post_title=view.findViewById(R.id.post_title);
-        TextView post_content=view.findViewById(R.id.post_Content);
-        TextView user_name=view.findViewById(R.id.user_name);
-        TextView user_post=view.findViewById(R.id.user_post);
-        TextView post_date=view.findViewById(R.id.post_date);
-        TextView post_time=view.findViewById(R.id.post_time);
-        TextView register_button_text_bool=view.findViewById(R.id.register_button_text_bool);
+        post_title=view.findViewById(R.id.post_title);
+        post_content=view.findViewById(R.id.post_Content);
+        user_name=view.findViewById(R.id.user_name);
+        user_post=view.findViewById(R.id.user_post);
+        post_date=view.findViewById(R.id.post_date);
+        post_time=view.findViewById(R.id.post_time);
+        register_button_text_bool=view.findViewById(R.id.register_button_text_bool);
 
         register_button=view.findViewById(R.id.register_button);
-
         post_title.setText(list_data.get(position).post_title);
         post_content.setText(list_data.get(position).post_content);
         post_date.setText(list_data.get(position).post_date);
         post_time.setText(list_data.get(position).post_time);
-        System.out.println("adapter post detail-->"+user_data_post);
-        user_name.setText(user_data_post.get(position).full_name);
-        user_post.setText(user_data_post.get(position).user_access+" of "+user_data_post.get(position).user_dept);
+        user_name.setText(list_data.get(position).user_name);
+        user_post.setText(list_data.get(position).user_access+" of "+list_data.get(position).user_dept);
+
+
         if (!list_data.get(position).register_button.equals("true")){
             register_button.setVisibility(View.GONE);
             register_button_text_bool.setVisibility(View.GONE);
@@ -92,9 +96,7 @@ public class post_adapter extends BaseAdapter {
                 }
             });
         }
-        //user_name.setText(list_data.get(position).post_title);
-
-
         return view;
+
     }
 }

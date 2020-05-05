@@ -38,7 +38,6 @@ public class HomeFragment extends Fragment {
     ArrayList<post_obj> post_data;
     static String post_id;
     ArrayList<post_obj> post_data_sort;
-    public  ArrayList<user> user_detail_post;
 
     int count;
 
@@ -48,9 +47,8 @@ public class HomeFragment extends Fragment {
         textView.setText("Announcements");
         post_data=new ArrayList<>();
         post_data_sort=new ArrayList<>();
-        user_detail_post=new ArrayList<>();
         ListView listView=root.findViewById(R.id.list_of_post);
-        adapter=new post_adapter(getContext(),post_data,getParentFragmentManager(),user_detail_post);
+        adapter=new post_adapter(getContext(),post_data,getParentFragmentManager());
         listView.setAdapter(adapter);
 
         reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("announcement_post");
@@ -64,7 +62,8 @@ public class HomeFragment extends Fragment {
                     post_obj obj=new post_obj(ds1.child("post_id").getValue().toString(),ds1.child("post_title").getValue().toString(),ds1.child("post_content").getValue().toString(),
                             ds1.child("register_button").getValue().toString(),ds1.child("user_id").getValue().toString(),
                             ds1.child("post_date").getValue().toString(),ds1.child("post_time").getValue().toString(),
-                            ds1.child("post_candidatepost").getValue().toString());
+                            ds1.child("post_candidatepost").getValue().toString(),ds1.child("user_name").getValue().toString(),
+                            ds1.child("user_access").getValue().toString(),ds1.child("user_dept").getValue().toString());
                     //post_data.add(obj);
                     post_data_sort.add(obj);
 
@@ -75,13 +74,11 @@ public class HomeFragment extends Fragment {
                     int new_count1=count+2;
                     post_id="post_"+new_count1;
                 }
-                System.out.println("bhaiiii-------------->");
                 for (int j = post_data_sort.size()-1;j>=0;j--){
-                    System.out.println("haannnn--->"+j);
                     post_data.add(post_data_sort.get(j));
                 }
-                user_detail();
-                System.out.println("dta afetr use-->"+user_detail_post);
+                adapter.notifyDataSetChanged();
+               // System.out.println("dta afetr use-->"+user_detail_post);
             }
 
             @Override
@@ -105,43 +102,6 @@ public class HomeFragment extends Fragment {
         });
         return root;
 
-    }
-
-    public void user_detail(){
-        try {
-            for (int i=0;i<post_data.size();i++){
-                DatabaseReference reff= FirebaseDatabase.getInstance().getReference().child("mad_project").child("user").child(post_data_sort.get(i).user_id);
-                reff.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        count = (int) dataSnapshot.getChildrenCount();
-                        System.out.println(count);
-                        System.out.println("heyyhhhhhhhhhhhhhhhhhhhhhh");
-                        String user_name=dataSnapshot.child("full_name").getValue().toString();
-                        String user_prn=dataSnapshot.child("prn_no").getValue().toString();
-                        String user_access=dataSnapshot.child("user_access").getValue().toString();
-                        String user_block=dataSnapshot.child("user_block").getValue().toString();
-                        String user_dept=dataSnapshot.child("user_dept").getValue().toString();
-                        String user_id=dataSnapshot.child("user_id").getValue().toString();
-                        String user_year=dataSnapshot.child("user_year").getValue().toString();
-                        user_detail_post.add(new user(user_id,user_name,user_prn,user_access,user_year,user_dept,user_block));
-                        adapter.notifyDataSetChanged();
-
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-
-                });
-
-            }
-        }catch (Error error){
-            System.out.println(error);
-
-        }finally {
-
-        }
     }
 
 

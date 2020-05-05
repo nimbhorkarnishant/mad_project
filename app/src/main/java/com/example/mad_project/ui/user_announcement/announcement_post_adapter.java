@@ -17,10 +17,9 @@ public class announcement_post_adapter extends BaseAdapter {
     private Context context;
     private ArrayList<post_obj> list_data;
     public ArrayList<user>user_data_post;
-    public announcement_post_adapter(Context context, ArrayList list_data,ArrayList<user> user_data_post) {
+    public announcement_post_adapter(Context context, ArrayList list_data) {
         this.context=context;
         this.list_data=list_data;
-        this.user_data_post=user_data_post;
     }
 
 
@@ -57,8 +56,8 @@ public class announcement_post_adapter extends BaseAdapter {
         post_content.setText(list_data.get(position).post_content);
         post_date.setText(list_data.get(position).post_date);
         post_time.setText(list_data.get(position).post_time);
-        user_name.setText(user_data_post.get(position).full_name);
-        user_post.setText(user_data_post.get(position).user_access+" of "+user_data_post.get(position).user_dept);
+        user_name.setText(list_data.get(position).user_name);
+        user_post.setText(list_data.get(position).user_access+" of "+list_data.get(position).user_dept);
 
         if (list_data.get(position).register_button.equals("true")){
             register_button.setVisibility(View.GONE);
