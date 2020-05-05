@@ -10,8 +10,8 @@
     <item
         android:id="@+id/give_update_candi"
         android:title="Send update Via email" />
-    <item
-        android:id="@+id/sent_email"
-        android:title="Sent Email" />
+<!--    <item-->
+<!--        android:id="@+id/sent_email"-->
+<!--        android:title="Sent Email" />-->
 
 </menu>
