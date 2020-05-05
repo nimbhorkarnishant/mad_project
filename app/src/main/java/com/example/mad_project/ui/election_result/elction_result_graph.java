@@ -262,16 +262,21 @@ public class elction_result_graph extends Fragment {
             perc_vote_max.add(prec_vote);
             entries.add(new BarEntry(i, prec_vote));
         }
-        int max = Collections.max(perc_vote_max);
-        int index=perc_vote_max.indexOf(max);
-        String winner_name=name_of_elected_candi.get(index);
-        if (voting_status.equals("off")){
-            Toast.makeText(getContext(), winner_name+" is become a new "+pos_candi+" for your class!", Toast.LENGTH_LONG).show();
-
+        if (perc_vote_max.size()==0){
+            Toast.makeText(getContext(), "Sorry no election happend in this class or department!", Toast.LENGTH_LONG).show();
         }
         else {
-            Toast.makeText(getContext(), winner_name+" is in lead !", Toast.LENGTH_LONG).show();
+            int max = Collections.max(perc_vote_max);
+            int index=perc_vote_max.indexOf(max);
+            String winner_name=name_of_elected_candi.get(index);
+            if (voting_status.equals("off")){
+                Toast.makeText(getContext(), winner_name+" is become a new "+pos_candi+" for your class!", Toast.LENGTH_LONG).show();
 
+            }
+            else {
+                Toast.makeText(getContext(), winner_name+" is in lead !", Toast.LENGTH_LONG).show();
+
+            }
         }
 
 //        entries.add(new BarEntry(1, 80));
