@@ -125,6 +125,8 @@ public class candidate_info_election extends Fragment {
         candi_id_tv=v.findViewById(R.id.candi_id);
         text_meaasge_replace_button=v.findViewById(R.id.tv_replace_button);
         resume_see=v.findViewById(R.id.resume_see_button);
+
+
         SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("user_detail",MODE_PRIVATE);
         user_id=sharedPreferences.getString("user_id","");
         user_block=sharedPreferences.getString("user_block","");
@@ -146,6 +148,7 @@ public class candidate_info_election extends Fragment {
                     block_candi_test=ds1.child("block").getValue().toString();
                     pos_candi_test=ds1.child("position").getValue().toString();
                     ds1.child("users").getValue(Object.class);
+
 
                     try {
                         if (object_candi.candi_pos.equals("CR")){

@@ -281,6 +281,8 @@ public class register_candi_form extends Fragment  {
                                 register_candi_obj new_obj = new register_candi_obj(name,prn,email,dob1,dept,candi_year,candi_block,candi_id,post_position,resume_link);
                                 FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election")
                                         .child(candi_id).setValue(new_obj);
+                             //   FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election")
+                               //         .child(candi_id).child("selected_for_live_vote").setValue("No");
                                 String text_subject="Candidate Registration ";
                                 String text_content="Thank You! You are Register for "+post_position+" Post Successufully! Further Instruction will send you " +
                                         "to your email id about the Interview process.";

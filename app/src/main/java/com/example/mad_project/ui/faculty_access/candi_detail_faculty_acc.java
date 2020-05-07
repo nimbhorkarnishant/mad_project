@@ -59,7 +59,7 @@ public class candi_detail_faculty_acc extends Fragment {
     String candi_id_detail;
     String candi_email_id,candi_pos_email,year_test,dept_test,block_test,position_test;
     String voting_id;
-    Boolean flag;
+    Boolean flag=false;
     int count_vot_obj;
     Button see_resume;
     public candi_detail_faculty_acc() {
@@ -209,10 +209,6 @@ public class candi_detail_faculty_acc extends Fragment {
                                 try {
                                     FirebaseDatabase.getInstance().getReference().child("mad_project").child("register_candidate_election").
                                             child(candi_id_detail).child("selected_for_live_vote").setValue("Yes");
-                                    String text_subject="Candidate Interview Result";
-                                    String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
-                                    JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
-                                    javaMailAPI.execute();
                                     adding_to_live_voting();
                                 }
                                 catch (Exception e){
@@ -308,6 +304,10 @@ public class candi_detail_faculty_acc extends Fragment {
                                 else {
                                     reff_vote.child(ds1.getKey()).child(candi_id_detail).setValue(0);
                                     flag=true;
+                                    String text_subject="Candidate Interview Result";
+                                    String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
+                                    JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
+                                    javaMailAPI.execute();
                                     Toast.makeText(getContext(), "Candidate is Eligible For live Vote!", Toast.LENGTH_LONG).show();
                                     break;
 
@@ -331,6 +331,10 @@ public class candi_detail_faculty_acc extends Fragment {
                                 else {
                                     reff_vote.child(ds1.getKey()).child(candi_id_detail).setValue(0);
                                     flag=true;
+                                    String text_subject="Candidate Interview Result";
+                                    String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
+                                    JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
+                                    javaMailAPI.execute();
                                     Toast.makeText(getContext(), "Candidate is Eligible For live Vote!", Toast.LENGTH_LONG).show();
                                     break;
 
@@ -366,6 +370,10 @@ public class candi_detail_faculty_acc extends Fragment {
                     reff_vote_finalize.child(voting_id).child("position").setValue(position_test);
                     reff_vote_finalize.child(voting_id).child("voting_status").setValue("off");
                     reff_vote_finalize.child(voting_id).child(candi_id_detail).setValue(0);
+                    String text_subject="Candidate Interview Result";
+                    String text_content="By considering your Profile and your interview,We are happy to say you, your Are Selectd for live voting for "+ candi_pos_email+ " Election ";
+                    JavaMailAPI javaMailAPI = new JavaMailAPI(getContext(),candi_email_id,text_subject,text_content);
+                    javaMailAPI.execute();
                 }
                 else {}
             }

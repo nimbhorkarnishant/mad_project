@@ -316,7 +316,7 @@ public class list_candi_for_election extends Fragment {
 
                 }
                 if (register_candi_list_selected.size()==0){
-                    Toast.makeText(getContext(), "No one is Selected yet in this section!", Toast.LENGTH_LONG).show();
+                     Toast.makeText(getContext(), "No one is Selected yet in this section!", Toast.LENGTH_LONG).show();
 
                 }
                 else{

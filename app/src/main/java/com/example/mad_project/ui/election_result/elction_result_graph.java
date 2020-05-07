@@ -119,7 +119,10 @@ public class elction_result_graph extends Fragment {
                         String dept_candi_test=ds1.child("candi_dept").getValue().toString();
                         String block_candi_test=ds1.child("candi_block").getValue().toString();
                         String pos_candi_test=ds1.child("candi_pos").getValue().toString();
-                        String selection_status=ds1.child("selected_for_live_vote").getValue().toString();
+                        String selection_status="No";
+                        if (ds1.hasChild("selected_for_live_vote")){
+                             selection_status=ds1.child("selected_for_live_vote").getValue().toString();
+                        }
                         System.out.println(selection_status);
                         System.out.println(pos_candi_test);
                         if (pos_candi.equals("CR")){
@@ -133,7 +136,7 @@ public class elction_result_graph extends Fragment {
                                     System.out.println(candidate_elected_list);
 
                                 }
-                                else { }
+                                else {}
 
                             }
                             else { }
@@ -147,7 +150,7 @@ public class elction_result_graph extends Fragment {
                                     String candidate_name=ds1.child("candidate_name").getValue().toString();
                                     candidate_elected_list.add(new elected_candi_obj(candidate_id,candidate_name,0));
                                 }
-                                else { }
+                                else {}
                             }
                             else {
 
@@ -190,8 +193,12 @@ public class elction_result_graph extends Fragment {
                         if (year_candi_test.equals(year_candi) && dept_candi_test.equals(dept_candi)
                                 && block_candi_test.equals(block_candi) && pos_candi_test.equals(pos_candi)){
                             for (int i=0;i<candidate_elected_list.size();i++){
-                                Integer vote_count=ds1.child(candidate_elected_list.get(i).candidate_id).getValue(Integer.class);
-                                candidate_elected_list.get(i).candidate_vote_count=vote_count;
+                                if (ds1.hasChild(candidate_elected_list.get(i).candidate_id)) {
+                                    Integer vote_count=ds1.child(candidate_elected_list.get(i).candidate_id).getValue(Integer.class);
+                                    candidate_elected_list.get(i).candidate_vote_count=vote_count;
+                                }else {
+                                    candidate_elected_list.get(i).candidate_vote_count=0;
+                                }
                             }
 
 
@@ -202,8 +209,12 @@ public class elction_result_graph extends Fragment {
                     else{
                         if ( dept_candi_test.equals(dept_candi) && pos_candi_test.equals(pos_candi)){
                             for (int i=0;i<candidate_elected_list.size();i++){
-                                Integer vote_count=ds1.child(candidate_elected_list.get(i).candidate_id).getValue(Integer.class);
-                                candidate_elected_list.get(i).candidate_vote_count=vote_count;
+                                if (ds1.hasChild(candidate_elected_list.get(i).candidate_id)) {
+                                    Integer vote_count=ds1.child(candidate_elected_list.get(i).candidate_id).getValue(Integer.class);
+                                    candidate_elected_list.get(i).candidate_vote_count=vote_count;
+                                }else {
+                                    candidate_elected_list.get(i).candidate_vote_count=0;
+                                }
                             }
 
                         }
@@ -246,38 +257,56 @@ public class elction_result_graph extends Fragment {
     private ArrayList getData(){
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<Integer> perc_vote_max=new ArrayList<>();
-        int total_vote=0;
-        System.out.println("count-->"+candidate_elected_list.size());
-        for (int i=0;i<candidate_elected_list.size();i++){
-            total_vote+=candidate_elected_list.get(i).candidate_vote_count;
-
-        }
-        for (int i=0;i<candidate_elected_list.size();i++){
-            System.out.println("total votes-->"+total_vote);
-            System.out.println(candidate_elected_list.get(i).candidate_vote_count);
-            name_of_elected_candi.add(candidate_elected_list.get(i).candidate_name);
-            int candi_vote=candidate_elected_list.get(i).candidate_vote_count;
-            int prec_vote=(candi_vote*100)/total_vote;
-            System.out.println(prec_vote);
-            perc_vote_max.add(prec_vote);
-            entries.add(new BarEntry(i, prec_vote));
-        }
-        if (perc_vote_max.size()==0){
+        if (candidate_elected_list.size()==0){
             Toast.makeText(getContext(), "Sorry no election happend in this class or department!", Toast.LENGTH_LONG).show();
+
         }
         else {
-            int max = Collections.max(perc_vote_max);
-            int index=perc_vote_max.indexOf(max);
-            String winner_name=name_of_elected_candi.get(index);
-            if (voting_status.equals("off")){
-                Toast.makeText(getContext(), winner_name+" is become a new "+pos_candi+" for your class!", Toast.LENGTH_LONG).show();
+            int total_vote=0;
+            System.out.println("count-->"+candidate_elected_list.size());
+            for (int i=0;i<candidate_elected_list.size();i++){
+                total_vote+=candidate_elected_list.get(i).candidate_vote_count;
 
             }
-            else {
-                Toast.makeText(getContext(), winner_name+" is in lead !", Toast.LENGTH_LONG).show();
+
+            for (int i=0;i<candidate_elected_list.size();i++){
+                System.out.println("total votes-->"+total_vote);
+                System.out.println(candidate_elected_list.get(i).candidate_vote_count);
+                name_of_elected_candi.add(candidate_elected_list.get(i).candidate_name);
+                int candi_vote=candidate_elected_list.get(i).candidate_vote_count;
+                if (total_vote!=0){
+                    int prec_vote=(candi_vote*100)/total_vote;
+                    System.out.println(prec_vote);
+                    perc_vote_max.add(prec_vote);
+                    entries.add(new BarEntry(i, prec_vote));
+                }
 
             }
+            if (perc_vote_max.size()!=0){
+                //Toast.makeText(getContext(), "Sorry no election happend in this class or department!", Toast.LENGTH_LONG).show();
+                int max = Collections.max(perc_vote_max);
+                int index=perc_vote_max.indexOf(max);
+                String winner_name=name_of_elected_candi.get(index);
+                try {
+                    if (voting_status.equals("off")){
+                        Toast.makeText(getContext(), winner_name+" is become a new "+pos_candi+" for your class!", Toast.LENGTH_LONG).show();
+
+                    }
+                    else {
+                        Toast.makeText(getContext(), winner_name+" is in lead !", Toast.LENGTH_LONG).show();
+
+                    }
+                }catch (Error error){
+
+                }
+                finally {
+
+                }
+            }
+            else {}
+
         }
+
 
 //        entries.add(new BarEntry(1, 80));
 //        entries.add(new BarEntry(2, 60));
